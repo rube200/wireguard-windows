@@ -37,6 +37,7 @@ const (
 	PeerReplaceAllowedIPs      PeerFlag = 1 << 5
 	PeerRemove                 PeerFlag = 1 << 6
 	PeerUpdateOnly             PeerFlag = 1 << 7
+	PeerHasObfuscateConnection PeerFlag = 1 << 8
 )
 
 type Peer struct {

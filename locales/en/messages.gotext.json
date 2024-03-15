@@ -1950,6 +1950,13 @@
                 }
             ],
             "fuzzy": true
+        },
+        {
+            "id": "Obfuscate connection:",
+            "message": "Obfuscate connection:",
+            "translation": "Obfuscate connection:",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
         }
     ]
 }

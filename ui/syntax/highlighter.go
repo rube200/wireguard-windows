@@ -24,6 +24,7 @@ const (
 	highlightPort
 	highlightMTU
 	highlightKeepalive
+	highlightObfuscate
 	highlightComment
 	highlightDelimiter
 	highlightTable
@@ -268,6 +269,14 @@ func (s stringSpan) isValidPersistentKeepAlive() bool {
 	return s.isValidUint(false, 0, 65535)
 }
 
+func (s stringSpan) isValidObfuscateConnection() bool {
+	if s.isSame("1") || s.isSame("0") || s.isCaselessSame("t") || s.isCaselessSame("f") {
+		return true
+	}
+
+	return s.isCaselessSame("false") || s.isCaselessSame("true")
+}
+
 // It's probably not worthwhile to try to validate a bash expression. So instead we just demand non-zero length.
 func (s stringSpan) isValidPrePostUpDown() bool {
 	return s.len != 0
@@ -376,6 +385,7 @@ const (
 	fieldAllowedIPs
 	fieldEndpoint
 	fieldPersistentKeepalive
+	fieldObfuscateConnection
 	fieldInvalid
 )
 
@@ -413,6 +423,8 @@ func (s stringSpan) field() field {
 		return fieldEndpoint
 	case s.isCaselessSame("PersistentKeepalive"):
 		return fieldPersistentKeepalive
+	case s.isCaselessSame("ObfuscateConnection"):
+		return fieldObfuscateConnection
 	case s.isCaselessSame("PreUp"):
 		return fieldPreUp
 	case s.isCaselessSame("PostUp"):
@@ -524,6 +536,8 @@ func (hsa *highlightSpanArray) highlightValue(parent, s stringSpan, section fiel
 		hsa.append(parent.s, s, validateHighlight(s.isValidPort(), highlightPort))
 	case fieldPersistentKeepalive:
 		hsa.append(parent.s, s, validateHighlight(s.isValidPersistentKeepAlive(), highlightKeepalive))
+	case fieldObfuscateConnection:
+		hsa.append(parent.s, s, validateHighlight(s.isValidObfuscateConnection(), highlightObfuscate))
 	case fieldEndpoint:
 		if !s.isValidEndpoint() {
 			hsa.append(parent.s, s, highlightError)

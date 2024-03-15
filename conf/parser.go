@@ -108,6 +108,10 @@ func parsePersistentKeepalive(s string) (uint16, error) {
 	return uint16(m), nil
 }
 
+func parseObfuscateConnection(s string) (bool, error) {
+	return strconv.ParseBool(s)
+}
+
 func parseTableOff(s string) (bool, error) {
 	if s == "off" {
 		return true, nil
@@ -290,6 +294,14 @@ func FromWgQuick(s, name string) (*Config, error) {
 					return nil, err
 				}
 				peer.PersistentKeepalive = p
+
+			case "obfuscateconnection":
+				o, err := parseObfuscateConnection(val)
+				if err != nil {
+					return nil, err
+				}
+				peer.ObfuscateConnection = o
+
 			case "endpoint":
 				e, err := parseEndpoint(val)
 				if err != nil {
@@ -373,6 +385,9 @@ func FromDriverConfiguration(interfaze *driver.Interface, existingConfig *Config
 		}
 		if p.Flags&driver.PeerHasPersistentKeepalive != 0 {
 			peer.PersistentKeepalive = p.PersistentKeepalive
+		}
+		if p.Flags&driver.PeerHasObfuscateConnection != 0 {
+			peer.ObfuscateConnection = true
 		}
 		peer.TxBytes = Bytes(p.TxBytes)
 		peer.RxBytes = Bytes(p.RxBytes)

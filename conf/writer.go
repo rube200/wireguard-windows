@@ -87,6 +87,10 @@ func (conf *Config) ToWgQuick() string {
 		if peer.PersistentKeepalive > 0 {
 			output.WriteString(fmt.Sprintf("PersistentKeepalive = %d\n", peer.PersistentKeepalive))
 		}
+
+		if peer.ObfuscateConnection {
+			output.WriteString(fmt.Sprintf("ObfuscateConnection = %v\n", peer.ObfuscateConnection))
+		}
 	}
 	return output.String()
 }
@@ -116,6 +120,9 @@ func (config *Config) ToDriverConfiguration() (*driver.Interface, uint32) {
 				flags |= driver.PeerHasEndpoint
 				endpoint.SetAddrPort(netip.AddrPortFrom(addr, config.Peers[i].Endpoint.Port))
 			}
+		}
+		if config.Peers[i].ObfuscateConnection {
+			flags |= driver.PeerHasObfuscateConnection
 		}
 		c.AppendPeer(&driver.Peer{
 			Flags:               flags,

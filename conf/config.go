@@ -58,6 +58,7 @@ type Peer struct {
 	AllowedIPs          []netip.Prefix
 	Endpoint            Endpoint
 	PersistentKeepalive uint16
+	ObfuscateConnection bool
 
 	RxBytes           Bytes
 	TxBytes           Bytes

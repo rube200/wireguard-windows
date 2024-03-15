@@ -62,6 +62,7 @@ type peerView struct {
 	allowedIPs          *labelTextLine
 	endpoint            *labelTextLine
 	persistentKeepalive *labelTextLine
+	obfuscateConnection *labelTextLine
 	latestHandshake     *labelTextLine
 	transfer            *labelTextLine
 	lines               []widgetsLine
@@ -337,6 +338,7 @@ func newPeerView(parent walk.Container) (*peerView, error) {
 		{l18n.Sprintf("Allowed IPs:"), &pv.allowedIPs},
 		{l18n.Sprintf("Endpoint:"), &pv.endpoint},
 		{l18n.Sprintf("Persistent keepalive:"), &pv.persistentKeepalive},
+		{l18n.Sprintf("Obfuscate connection:"), &pv.obfuscateConnection},
 		{l18n.Sprintf("Latest handshake:"), &pv.latestHandshake},
 		{l18n.Sprintf("Transfer:"), &pv.transfer},
 	}
@@ -474,6 +476,12 @@ func (pv *peerView) apply(c *conf.Peer) {
 		pv.persistentKeepalive.show(strconv.Itoa(int(c.PersistentKeepalive)))
 	} else {
 		pv.persistentKeepalive.hide()
+	}
+
+	if c.ObfuscateConnection {
+		pv.obfuscateConnection.show(strconv.FormatBool(c.ObfuscateConnection))
+	} else {
+		pv.obfuscateConnection.hide()
 	}
 
 	if !c.LastHandshakeTime.IsEmpty() {

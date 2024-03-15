@@ -29,6 +29,7 @@ PublicKey = TrMvSoP4jYQlY6RIzBgbssQqY3vxI2Pi+y71lOWWXX0=
 Endpoint = [2607:5300:60:6b0::c05f:543]:2468 
 AllowedIPs = 10.192.122.4/32, 192.168.0.0/16
 PersistentKeepalive = 100
+ObfuscateConnection = true
 
 [Peer] 
 PublicKey = gN65BkIKy1eCE9pP1wdc8ROUtkHLF2PfAqYdyYBz6EA= 
@@ -94,6 +95,7 @@ func TestFromWgQuick(t *testing.T) {
 		equal(t, Endpoint{Host: "2607:5300:60:6b0::c05f:543", Port: 2468}, conf.Peers[1].Endpoint)
 		equal(t, "TrMvSoP4jYQlY6RIzBgbssQqY3vxI2Pi+y71lOWWXX0=", conf.Peers[1].PublicKey.String())
 		equal(t, uint16(100), conf.Peers[1].PersistentKeepalive)
+		equal(t, true, conf.Peers[1].ObfuscateConnection)
 
 		lenTest(t, conf.Peers[2].AllowedIPs, 1)
 		equal(t, Endpoint{Host: "test.wireguard.com", Port: 18981}, conf.Peers[2].Endpoint)
